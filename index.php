@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Painel Principal</title>
     <!-- Link para o arquivo CSS para estilização da página -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">

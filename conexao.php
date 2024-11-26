@@ -10,9 +10,6 @@
     if ($conn->connect_error) {
         die("Connection failed:" . $conn->connect_error);
     }
-    else{
-        echo "deu bom";
-    }
     // Adiciona a coluna 'imagem à tabela 'produtos' se ela não existir 
     $sql = "SHOW COLUMNS FROM produtos LIKE 'imagem'";
     $result = $conn->query($sql);
