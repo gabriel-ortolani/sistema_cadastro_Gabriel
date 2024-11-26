@@ -79,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $imagem = "";
 if(isset($_FILES['imagem']) && $_FILES['imagem'] ['error'] == 0) { 
     $resultado_upload = redimensionarESalvarImagem($_FILES['imagem']);
-if(strpos($resultado_upload, 'img/') === 0) {
-    $imagem = $resultado_upload;
-} else {
-    $mensagem_erro = $resultado_upload;
-}
+    if(strpos($resultado_upload, 'img/') === 0) {
+        $imagem = $resultado_upload;
+    } else {
+        $mensagem_erro = $resultado_upload;
+    }
 }
 
 // Prepara a query SQL para inserção ou atualização

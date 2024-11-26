@@ -45,7 +45,7 @@ if ($conn->query($sql) === TRUE) {
                 <td><?php echo $row['nome']; ?></td>
                 <td><?php echo $row['descricao'];?></td>
                 <td><?php echo $row['preco']; ?></td>
-                <td><?php echo $row['fornecedor nome']; ?></td>
+                <td><?php echo $row['fornecedor_nome']; ?></td>
                 <td>
                     <?php if ($row['imagem']): ?>
                         <img src="<?php echo $row['imagem']; ?>" alt="Imagem do produto" style="max-width: 100px;">
