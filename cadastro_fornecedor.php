@@ -1,9 +1,9 @@
 <?php
 // Inclui o arquivo que valida a sessão do usuário 
-    include('valida_sessao.php');
+include('valida_sessao.php');
 
 //Inclui o arquivo de conexão com o banco de dados 
-    include('conexao.php');
+include('conexao.php');
 
 //Função para redimensionar e salvar a imagem
 Function redimensionarESalvarImagem($arquivo, $largura = 80, $altura = 80) {
@@ -74,35 +74,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
 
-// Processa o upload da imagem
-$imagem = "";
-if(isset($_FILES['imagem']) && $_FILES['imagem'] ['error'] == 0) { 
-    $resultado_upload = redimensionarESalvarImagem($_FILES['imagem']);
-    if(strpos($resultado_upload, 'img/') === 0) {
-        $imagem = $resultado_upload;
+    // Processa o upload da imagem
+    $imagem = "";
+    if(isset($_FILES['imagem']) && $_FILES['imagem'] ['error'] == 0) { 
+        $resultado_upload = redimensionarESalvarImagem($_FILES['imagem']);
+        if(strpos($resultado_upload, 'img/') === 0) {
+            $imagem = $resultado_upload;
+        } else {
+            $mensagem_erro = $resultado_upload;
+        }
+    }
+
+    // Prepara a query SQL para inserção ou atualização
+    if ($id) {
+
+        // Se o ID existe, é uma atualização
+        $sql = "UPDATE fornecedores SET nome='$nome', email='$email', telefone='$telefone'";
+    if($imagem) {
+        $sql.=", imagem='$imagem'";
+        }
+        $sql.= " WHERE id='$id'";
+        $mensagem = "Fornecedor atualizado com sucesso!";
     } else {
-        $mensagem_erro = $resultado_upload;
+        // Se não há ID, é uma nova inserção
+        $sql = "INSERT INTO fornecedores (nome, email, telefone, imagem) VALUES ('$nome', '$email', '$telefone', '$imagem')";$mensagem = "Fornecedor cadastrado com sucesso!";
+    
     }
-}
-
-// Prepara a query SQL para inserção ou atualização
-if ($id) {
-
-    // Se o ID existe, é uma atualização
-    $sql = "UPDATE fornecedores SET nome='$nome', email='$email', telefone='$telefone'";
-if($imagem) {
-    $sql.=", imagem='$imagem'";
-    }
-    $sql.= " WHERE id='$id'";
-    $mensagem = "Fornecedor atualizado com sucesso!";
-} else {
-    // Se não há ID, é uma nova inserção
-    $sql = "INSERT INTO fornecedores (nome, email, telefone, imagem) VALUES ('$nome', '$email', '$telefone', '$imagem')";$mensagem = "Fornecedor cadastrado com sucesso!";
-  
-}
-// Executa a query e verifica se houve erro
-if ($conn->query($sql) !== TRUE) { 
-    $mensagem = "Erro:" . $conn->error;
+    // Executa a query e verifica se houve erro
+    if ($conn->query($sql) !== TRUE) { 
+        $mensagem = "Erro:" . $conn->error;
     }
 }
 
@@ -110,20 +110,19 @@ if ($conn->query($sql) !== TRUE) {
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
 
+    // Verifica se o fornecedor tem produtos cadastrados
+    $check_produtos = $conn->query("SELECT COUNT(*) as count FROM produtos WHERE fornecedor_id = '$delete_id'")->fetch_assoc();
 
-// Verifica se o fornecedor tem produtos cadastrados
-$check_produtos = $conn->query("SELECT COUNT(*) as count FROM produtos WHERE fornecedor_id = '$delete_id'")->fetch_assoc();
-
-if ($check_produtos ['count'] > 0) {
-    $mensagem = "Não é possível excluir este fornecedor pois existem produtos cadastrados para ele.";
-} else {
-    $sql = "DELETE FROM fornecedores WHERE id='$delete_id'";
-if ($conn->query($sql) === TRUE) {
-    $mensagem = "Fornecedor excluído com sucesso!";
-} else {
-    $mensagem = "Erro ao excluir fornecedor:" . $conn->error;
-}
-}
+    if ($check_produtos ['count'] > 0) {
+        $mensagem = "Não é possível excluir este fornecedor pois existem produtos cadastrados para ele.";
+    } else {
+        $sql = "DELETE FROM fornecedores WHERE id='$delete_id'";
+    if ($conn->query($sql) === TRUE) {
+        $mensagem = "Fornecedor excluído com sucesso!";
+    } else {
+        $mensagem = "Erro ao excluir fornecedor:" . $conn->error;
+    }
+    }
 }
 //Busca todos os fornecedores para listar na tabela
 $fornecedores = $conn->query("SELECT * FROM fornecedores");
