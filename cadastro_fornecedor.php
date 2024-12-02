@@ -125,13 +125,13 @@ if (isset($_GET['delete_id'])) {
     }
 }
 //Busca todos os fornecedores para listar na tabela
-$fornecedores = $conn->query("SELECT * FROM fornecedores");
+$fornecedores = $conn->query("SELECT * FROM cadastro_fornecedores");
 
 // Se foi solicitada a edição de um fornecedor, busca os dados dele 
 $fornecedor = null;
 if (isset($_GET['edit_id'])) {
     $edit_id = $_GET['edit_id'];
-    $fornecedor = $conn->query("SELECT * FROM fornecedores WHERE id='$edit_id'")->fetch_assoc();
+    $fornecedor = $conn->query("SELECT * FROM cadastro_fornecedores WHERE id='$edit_id'")->fetch_assoc();
 }
 ?>
 
